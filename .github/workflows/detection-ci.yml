@@ -1,0 +1,57 @@
+name: Detection CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    name: Lint · Unit-test · Detection-test · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 1 · Lint rules
+        run: python tools/validate.py
+
+      - name: 2 · Unit-test the engine and converter
+        run: python -m unittest discover -s tests -v
+
+      - name: 3 · Run every detection against its telemetry
+        run: python tools/run_tests.py --junit reports/junit.xml
+
+      - name: 4 · Build SIEM queries (KQL + SPL)
+        run: python tools/convert.py --all --out queries
+
+      - name: 5 · Regenerate ATT&CK coverage
+        run: python tools/coverage.py
+
+      - name: 6 · Fail if generated files are out of date
+        run: |
+          if ! git diff --exit-code -- queries docs/COVERAGE.md coverage; then
+            echo "::error::Generated files are stale. Run 'make build' and commit the result."
+            exit 1
+          fi
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detection-reports
+          path: |
+            reports/
+            queries/
+            coverage/
