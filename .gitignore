@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+reports/
+emulation/emulation-results.json
+.venv/
+.DS_Store
