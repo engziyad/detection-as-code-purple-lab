@@ -1,0 +1,2 @@
+{"_case": "RC4 TGS for SQL service account", "EventID": 4769, "TargetUserName": "bob@CORP.LOCAL", "ServiceName": "svc_sql", "TicketEncryptionType": "0x17", "TicketOptions": "0x40810000", "Status": "0x0", "IpAddress": "::ffff:10.10.20.55"}
+{"_case": "RC4 TGS for web service account", "EventID": 4769, "TargetUserName": "bob@CORP.LOCAL", "ServiceName": "svc_iis", "TicketEncryptionType": "0x17", "TicketOptions": "0x40810000", "Status": "0x0", "IpAddress": "::ffff:10.10.20.55"}

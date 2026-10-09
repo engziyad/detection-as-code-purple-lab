@@ -1,0 +1,3 @@
+{"_case": "control panel applet", "EventID": 1, "Image": "C:\\Windows\\System32\\rundll32.exe", "OriginalFileName": "RUNDLL32.EXE", "CommandLine": "rundll32.exe shell32.dll,Control_RunDLL desk.cpl", "ParentImage": "C:\\Windows\\explorer.exe"}
+{"_case": "printer UI", "EventID": 1, "Image": "C:\\Windows\\System32\\rundll32.exe", "OriginalFileName": "RUNDLL32.EXE", "CommandLine": "rundll32.exe printui.dll,PrintUIEntry /il", "ParentImage": "C:\\Windows\\explorer.exe"}
+{"_case": "different binary in Temp", "EventID": 1, "Image": "C:\\Users\\bob\\AppData\\Local\\Temp\\setup.exe", "OriginalFileName": "setup.exe", "CommandLine": "setup.exe /quiet", "ParentImage": "C:\\Windows\\explorer.exe"}

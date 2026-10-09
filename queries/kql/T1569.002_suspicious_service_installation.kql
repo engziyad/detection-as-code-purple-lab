@@ -1,0 +1,4 @@
+// Suspicious Service Installation (PsExec-style / Command Services) | c36a647e-caeb-4c7d-894f-8b5a3619a350
+Event
+| where EventLog == "System"
+| where ((Provider_Name =~ @"Service Control Manager" and EventID == 7045) and ((ImagePath contains @"%COMSPEC%" or ImagePath contains @"cmd.exe /c" or ImagePath contains @"cmd /c" or ImagePath contains @"cmd.exe /Q /c" or ImagePath contains @"powershell" or ImagePath contains @"\ADMIN$\" or ImagePath contains @"\\127.0.0.1\" or ImagePath contains @"\AppData\" or ImagePath contains @"\Users\Public\" or ImagePath contains @"\Windows\Temp\" or ImagePath contains @".bat") or (ServiceName startswith @"PSEXESVC" or ServiceName startswith @"BTOBTO") or ImagePath matches regex @"(?i)^%?SystemRoot%?\\[A-Za-z]{8}\.exe$"))

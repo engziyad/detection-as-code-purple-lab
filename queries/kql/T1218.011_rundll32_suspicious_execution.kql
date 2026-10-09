@@ -1,0 +1,4 @@
+// Rundll32 Proxy Execution From Suspicious Context | 7bc31caf-8287-4c8e-9936-381e4ab88410
+Sysmon
+| where EventID == 1
+| where ((Image endswith @"\rundll32.exe" or OriginalFileName =~ @"RUNDLL32.EXE") and ((CommandLine contains @"javascript:" or CommandLine contains @"vbscript:" or CommandLine contains @"RunHTMLApplication") or (CommandLine contains @"\AppData\Local\Temp\" or CommandLine contains @"\AppData\Roaming\" or CommandLine contains @"\Users\Public\" or CommandLine contains @"\ProgramData\" or CommandLine contains @"\Windows\Temp\" or CommandLine contains @"\Downloads\") or (CommandLine contains @"comsvcs" and CommandLine contains @"minidump") or CommandLine matches regex @"(?i)rundll32(\.exe)?""?\s*$"))

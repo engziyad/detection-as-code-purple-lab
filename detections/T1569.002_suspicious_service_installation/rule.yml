@@ -1,0 +1,49 @@
+title: Suspicious Service Installation (PsExec-style / Command Services)
+id: c36a647e-caeb-4c7d-894f-8b5a3619a350
+status: test
+description: |
+  Detects new services (System 7045) whose binary path runs a command
+  interpreter, lives in a user-writable or admin share path, or matches
+  remote-execution tooling (PsExec, Impacket smbexec/psexec, CrackMapExec).
+  Service creation is the backbone of most SMB lateral movement.
+references:
+  - https://attack.mitre.org/techniques/T1569/002/
+  - https://attack.mitre.org/techniques/T1021/002/
+author: Ziyad (github.com/engziyad)
+date: 2026-10-09
+tags:
+  - attack.execution
+  - attack.t1569.002
+  - attack.lateral-movement
+  - attack.t1021.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection_event:
+    Provider_Name: 'Service Control Manager'
+    EventID: 7045
+  susp_path:
+    ImagePath|contains:
+      - '%COMSPEC%'
+      - 'cmd.exe /c'
+      - 'cmd /c'
+      - 'cmd.exe /Q /c'
+      - 'powershell'
+      - '\ADMIN$\'
+      - '\\127.0.0.1\'
+      - '\AppData\'
+      - '\Users\Public\'
+      - '\Windows\Temp\'
+      - '.bat'
+  susp_name:
+    ServiceName|startswith:
+      - 'PSEXESVC'
+      - 'BTOBTO'
+  susp_random_exe:
+    # Impacket psexec drops %SystemRoot%\<8 random chars>.exe
+    ImagePath|re: '^%?SystemRoot%?\\[A-Za-z]{8}\.exe$'
+  condition: selection_event and 1 of susp_*
+falsepositives:
+  - Sysinternals PsExec used by administrators (correlate with change tickets)
+level: high

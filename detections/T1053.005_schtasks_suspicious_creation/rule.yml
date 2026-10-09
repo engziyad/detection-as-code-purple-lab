@@ -1,0 +1,49 @@
+title: Scheduled Task Created With Suspicious Action
+id: 2114b226-991c-4830-9b80-8f5421283af3
+status: test
+description: |
+  Detects schtasks.exe /create where the task action points to a
+  user-writable location, a script interpreter, or a remote resource -
+  common persistence and lateral-execution patterns. Vendor updaters
+  under Program Files are not matched.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: Ziyad (github.com/engziyad)
+date: 2026-10-09
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.privilege-escalation
+  - attack.t1053.005
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_create:
+    Image|endswith: '\schtasks.exe'
+    CommandLine|contains: '/create'
+  susp_action:
+    CommandLine|contains:
+      - '\AppData\'
+      - '\Users\Public\'
+      - '\ProgramData\'
+      - '\Windows\Temp\'
+      - '%TEMP%'
+      - '%APPDATA%'
+      - 'powershell'
+      - 'cmd /c'
+      - 'cmd.exe /c'
+      - 'mshta'
+      - 'wscript'
+      - 'cscript'
+      - 'regsvr32'
+      - 'http://'
+      - 'https://'
+  susp_system_remote:
+    CommandLine|contains|all:
+      - '/s '
+      - '/ru system'
+  condition: selection_create and 1 of susp_*
+falsepositives:
+  - IT automation that schedules PowerShell maintenance scripts
+level: medium

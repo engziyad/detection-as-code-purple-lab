@@ -1,0 +1,41 @@
+# --------------------------------------------------------------------------- #
+# Backend mappings: where each Sigma logsource lives, and how fields are named.
+# Retarget the whole lab to your environment by editing this file only.
+#
+# KQL assumptions : a Sysmon parser function named `Sysmon` (common Sentinel
+#                   community parser) and a SecurityEvent / Event table whose
+#                   EventData fields are projected as columns.
+# SPL assumptions : Splunk Add-on for Sysmon / Windows (TA) field extractions.
+# --------------------------------------------------------------------------- #
+kql:
+  fields: {}
+  logsources:
+    process_creation: |
+      Sysmon
+      | where EventID == 1
+    process_access: |
+      Sysmon
+      | where EventID == 10
+    registry_set: |
+      Sysmon
+      | where EventID == 13
+    windows/security: |
+      SecurityEvent
+    windows/system: |
+      Event
+      | where EventLog == "System"
+
+spl:
+  fields:
+    EventID: EventCode
+  logsources:
+    process_creation: |
+      index=sysmon source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+    process_access: |
+      index=sysmon source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=10
+    registry_set: |
+      index=sysmon source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13
+    windows/security: |
+      index=wineventlog source="XmlWinEventLog:Security"
+    windows/system: |
+      index=wineventlog source="XmlWinEventLog:System"

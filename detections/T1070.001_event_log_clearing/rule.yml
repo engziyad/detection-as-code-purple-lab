@@ -1,0 +1,43 @@
+title: Windows Event Log Clearing via Command Line
+id: c62bd792-3b92-4bad-819c-fa3c123151d2
+status: test
+description: |
+  Detects attempts to wipe Windows event logs with wevtutil, PowerShell
+  (Clear-EventLog / Remove-EventLog / Limit-EventLog / EventLogSession.ClearLog)
+  or WMIC. Catching the *attempt* at process level complements the
+  Security 1102 / System 104 artifacts, which an attacker may suppress.
+references:
+  - https://attack.mitre.org/techniques/T1070/001/
+author: Ziyad (github.com/engziyad)
+date: 2026-10-09
+tags:
+  - attack.defense-evasion
+  - attack.t1070.001
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_wevtutil:
+    Image|endswith: '\wevtutil.exe'
+    CommandLine|contains:
+      - ' cl '
+      - ' clear-log '
+  selection_ps_cmdlet:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - 'Clear-EventLog'
+      - 'Remove-EventLog'
+      - 'Limit-EventLog'
+      - '.ClearLog('
+      - 'Clear-WinEvent'
+  selection_wmic:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'nteventlog'
+      - 'cleareventlog'
+  condition: 1 of selection_*
+falsepositives:
+  - Golden-image / VDI build scripts that reset logs before sealing
+level: high

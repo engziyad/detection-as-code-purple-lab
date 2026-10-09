@@ -1,0 +1,2 @@
+{"_case": "query only", "EventID": 1, "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks /query /fo LIST /v", "ParentImage": "C:\\Windows\\System32\\cmd.exe"}
+{"_case": "vendor updater in Program Files", "EventID": 1, "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks /create /tn \"VendorUpdate\" /tr \"C:\\Program Files\\Vendor\\update.exe\" /sc daily", "ParentImage": "C:\\Program Files\\Vendor\\installer.exe"}

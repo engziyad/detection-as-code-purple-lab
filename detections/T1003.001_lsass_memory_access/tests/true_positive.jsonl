@@ -1,0 +1,3 @@
+{"_case": "procdump from user folder", "EventID": 10, "SourceImage": "C:\\Users\\analyst\\Downloads\\procdump64.exe", "TargetImage": "C:\\Windows\\system32\\lsass.exe", "GrantedAccess": "0x1fffff"}
+{"_case": "comsvcs MiniDump via rundll32 (System32 path but abused LOLBin)", "EventID": 10, "SourceImage": "C:\\Windows\\System32\\rundll32.exe", "TargetImage": "C:\\Windows\\System32\\lsass.exe", "GrantedAccess": "0x1fffff"}
+{"_case": "custom tool with minimal read rights", "EventID": 10, "SourceImage": "C:\\ProgramData\\svc\\update.exe", "TargetImage": "C:\\Windows\\System32\\lsass.exe", "GrantedAccess": "0x1010"}

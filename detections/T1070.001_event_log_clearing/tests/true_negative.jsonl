@@ -1,0 +1,2 @@
+{"_case": "wevtutil query", "EventID": 1, "Image": "C:\\Windows\\System32\\wevtutil.exe", "CommandLine": "wevtutil qe Security /c:5 /rd:true /f:text", "ParentImage": "C:\\Windows\\System32\\cmd.exe", "User": "CORP\\analyst"}
+{"_case": "powershell reading logs", "EventID": 1, "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell Get-WinEvent -LogName Security -MaxEvents 20", "ParentImage": "C:\\Windows\\explorer.exe", "User": "CORP\\analyst"}

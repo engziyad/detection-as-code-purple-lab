@@ -1,0 +1,3 @@
+{"_case": "wevtutil security log", "EventID": 1, "Image": "C:\\Windows\\System32\\wevtutil.exe", "CommandLine": "wevtutil cl Security", "ParentImage": "C:\\Windows\\System32\\cmd.exe", "User": "CORP\\svc_backup"}
+{"_case": "powershell Clear-EventLog", "EventID": 1, "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell -c \"Clear-EventLog -LogName Security,System,Application\"", "ParentImage": "C:\\Windows\\System32\\cmd.exe", "User": "CORP\\admin"}
+{"_case": "wmic", "EventID": 1, "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic nteventlog where filename='security' call cleareventlog", "ParentImage": "C:\\Windows\\System32\\cmd.exe", "User": "CORP\\admin"}
